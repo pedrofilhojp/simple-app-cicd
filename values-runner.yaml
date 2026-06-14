@@ -1,0 +1,28 @@
+githubConfigUrl: ""  # preencher com a URL do repositório ou organização
+# githubConfigUrl: "https://github.com/SEU_ORG/SEU_REPO"
+
+githubConfigSecret:
+  github_token: ""  # preencher com o GitHub PAT (Personal Access Token)
+
+controllerServiceAccount:
+  namespace: arc-systems
+  name: arc-gha-rs-controller
+
+minRunners: 1
+maxRunners: 5
+
+containerMode:
+  type: dind  # Docker-in-Docker para builds de container
+
+template:
+  spec:
+    containers:
+      - name: runner
+        image: ghcr.io/actions/actions-runner:latest
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
