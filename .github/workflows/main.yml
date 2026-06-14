@@ -1,0 +1,7 @@
+jobs:
+  build:
+    runs-on: arc-runner-set  # nome do Helm release
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: echo "rodando no runner Kind!"
