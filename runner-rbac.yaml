@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: runner-sa
+  namespace: arc-runners
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: runner-admin-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin  # ClusterRole built-in do Kubernetes com acesso total
+subjects:
+  - kind: ServiceAccount
+    name: runner-sa
+    namespace: arc-runners
