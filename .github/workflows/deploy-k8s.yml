@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4 # Action para ter acesso ao repositorio
       - name: Configuração contexto kuberntes
+        uses: azure/k8s-set-context@v5
         # https://github.com/marketplace/actions/kubernetes-set-context
         method: kubeconfig
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
