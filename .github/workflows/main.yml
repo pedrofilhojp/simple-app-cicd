@@ -25,7 +25,7 @@ jobs:
       - name: Build da imagem (Apenas validação)
         uses: docker/build-push-action@v7
         with:
-          context: .
+          context: ./app
           file: ./app/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/app-githubaction:latest
           push: true # Garante que não envia nada ainda neste estágio
