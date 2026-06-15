@@ -45,4 +45,4 @@ jobs:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
       - name: Comando do kubernetes
-        run: kubectl get nodes
+        run: kubectl apply -f ./app/k8s

@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: go-web-ip
-          image: seu-registro/go-web-ip:latest
+          image: pedrofilhojp/app-githubaction:latest 
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
