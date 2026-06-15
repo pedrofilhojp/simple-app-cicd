@@ -2,8 +2,8 @@
 name: primeira-pipeline
 # Definindo a trigger
 on:
-  push:
-    branches: ["main"]
+  # push:
+  #   branches: ["main"]
   workflow_dispatch: # Permite que seja executado manualmente
 
 jobs:

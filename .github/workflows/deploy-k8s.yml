@@ -1,0 +1,14 @@
+name: deploy k8s
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build da aplicação
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # Action para ter acesso ao repositorio
+      - name: Configuração contexto kuberntes
+        # https://github.com/marketplace/actions/kubernetes-set-context
+        method: kubeconfig
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
