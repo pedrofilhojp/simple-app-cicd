@@ -9,7 +9,7 @@ on:
 jobs:
   primeiro-job:
     name: "Meu primeiro Job"
-    runs-on: ubuntu-latest  # nome do Helm release
+    runs-on: ubuntu-latest  
     steps:
       - name: "Acesso ao código"
         uses: actions/checkout@v4
@@ -25,6 +25,8 @@ jobs:
           print(variavel)
         shell: python
   segundo-job:
+    name: "Segundo Job"
+    runs-on: ubuntu-latest
     steps:
       - name: "Execução shell"
         run: |
