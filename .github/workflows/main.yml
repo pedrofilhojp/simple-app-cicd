@@ -20,7 +20,7 @@ jobs:
           echo "Parabéns"
   segundo-job:
     name: "Segundo Job"
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set 
     steps:
       - name: Set up Python # Action de python: Inicializando o ambiente para trabalhar com python
         uses: actions/setup-python@v5
