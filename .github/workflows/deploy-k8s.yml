@@ -5,7 +5,8 @@ on:
 jobs:
   build:
     name: Build da aplicação
-    runs-on: arc-runner-set
+    runs-on: ubuntu-latest
+    # runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v4 # Action para ter acesso ao repositorio
       - name: Configuração contexto kuberntes
