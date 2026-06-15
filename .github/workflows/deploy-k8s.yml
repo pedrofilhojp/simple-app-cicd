@@ -13,7 +13,10 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-      - name: kubectl get deployments
-        uses: abgeo/kubectl-action@1.25.3
+      - name: verify deployment
+        uses: steebchen/kubectl@v2.0.0
         with:
-          arg: get deployments        
+          config: ${{ secrets.KUBE_CONFIG }}
+          version: v1.21.0 # specify kubectl binary version explicitly
+          binaries-url: "https://dl.k8s.io/release/v1.21.0/bin/linux/amd64/kubectl" # specify the download url explicitly
+          command: get nodes    
