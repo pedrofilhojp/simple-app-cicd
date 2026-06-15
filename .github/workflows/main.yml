@@ -12,7 +12,9 @@ jobs:
     runs-on: arc-runner-set  # nome do Helm release
     steps:
       - uses: actions/checkout@v4 # Action para ter acesso ao repositorio
-      - name: Build
-        run: echo "rodando no runner Kind!"
-      - name: deploy
-        run: kubectl get pods
+      - name: "Primeira execução"
+        run: echo "Primeira execução no kind"
+      - name: "Segunda execução"
+        run: |
+          echo "Segunda execução no kind"
+          echo "Parabéns"
