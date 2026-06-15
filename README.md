@@ -174,16 +174,29 @@ Para confirmar:
 
 ## 6. Usar o runner em um workflow
 
-No arquivo de workflow (`.github/workflows/*.yaml`), referencie o runner pelo nome definido no Helm release:
+No arquivo de workflow (`.github/workflows/*.yaml`), referencie o runner pelo nome definido no Helm release. Para este primeiro exemplo, vamos usar o conteúdo do arquivo [main.yaml](main.yaml)
 
 ```yaml
+# Nome do workflow
+name: primeira-pipeline
+
+on: # Definindo a trigger
+  push:
+    branches: ["main"]
+  workflow_dispatch: # Permite que seja executado manualmente
+
 jobs:
   build:
+    name: "Meu primeiro Job"
     runs-on: arc-runner-set  # nome do Helm release
     steps:
-      - uses: actions/checkout@v4
-      - name: Build
-        run: echo "rodando no runner Kind!"
+      - uses: actions/checkout@v4 # Action para ter acesso ao repositorio
+      - name: "Primeira execução"
+        run: echo "Primeira execução no kind"
+      - name: "Segunda execução"
+        run: |
+          echo "Segunda execução no kind"
+          echo "Parabéns"
 ```
 
 ---
