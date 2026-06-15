@@ -7,30 +7,27 @@ on:
   workflow_dispatch: # Permite que seja executado manualmente
 
 jobs:
-  primeiro-job:
-    name: "Meu primeiro Job"
-    runs-on: ubuntu-latest  
-    steps:
-      - name: "Acesso ao código"
-        uses: actions/checkout@v4
-      - name: "Primeira execução"
-        run: |
-          echo "Primeira execução no kind"
-          echo "testes"
-          pwd
-          ls 
-      - name: "Segunda execução [python]"
-        run: |
-          variavel="teste"
-          print(variavel)
-        shell: python
-  segundo-job:
-    name: "Segundo Job"
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: "Execução shell"
-        run: |
-          echo "Primeira execução no kind"
-          echo "testes"
-          pwd
-          ls 
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Build project
+        run: echo "Compilando o projeto..."
+      
+      - run: sleep 5
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build  # <- O job 'test' só inicia depois que 'build' terminar
+    steps:
+      - name: Run tests
+        run: echo "Executando testes unitários..."
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build   # <- O job 'deploy' só inicia depois que 'test' terminar
+    steps:
+      - name: Deploy to production
+        run: echo "Fazendo deploy em produção!"
