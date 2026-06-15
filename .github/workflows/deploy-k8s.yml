@@ -9,15 +9,13 @@ jobs:
     # runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v4 # Action para ter acesso ao repositorio
+      - name: Ver conexto
+        run: echo ${{ toJson(runner) }}
       - name: Configuração contexto kuberntes
         uses: azure/k8s-set-context@v5 # https://github.com/marketplace/actions/kubernetes-set-context
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-      - name: verify deployment
-        uses: steebchen/kubectl@v2.0.0
-        with:
-          config: ${{ secrets.KUBE_CONFIG }}
-          version: v1.21.0 # specify kubectl binary version explicitly
-          binaries-url: "https://dl.k8s.io/release/v1.21.0/bin/linux/amd64/kubectl" # specify the download url explicitly
-          command: get nodes    
+      - name: "instalando kubectl"
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
