@@ -1,7 +1,16 @@
+# Nome do workflow
+name: primeira-pipeline
+# Definindo a trigger
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch: # Permite que seja executado manualmente
+
 jobs:
   build:
+    name: "Meu primeiro Job"
     runs-on: arc-runner-set  # nome do Helm release
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 # Action para ter acesso ao repositorio
       - name: Build
         run: echo "rodando no runner Kind!"
