@@ -2,32 +2,25 @@
 name: primeira-pipeline
 # Definindo a trigger
 on:
-  # push:
-  #   branches: ["main"]
+  push:
+    branches: ["main"]
   workflow_dispatch: # Permite que seja executado manualmente
 
 jobs:
   primeiro-job:
     name: "Meu primeiro Job"
-    runs-on: arc-runner-set  # nome do Helm release
+    runs-on: ubuntu-latest  # nome do Helm release
     steps:
-      - uses: actions/checkout@v4 # Action para ter acesso ao repositorio
+      - name: "Acesso ao código"
+        uses: actions/checkout@v4
       - name: "Primeira execução"
-        run: echo "Primeira execução no kind"
-      - name: "Segunda execução"
         run: |
-          echo "Segunda execução no kind"
-          echo "Parabéns"
-  segundo-job:
-    name: "Segundo Job"
-    runs-on: arc-runner-set 
-    steps:
-      - name: Set up Python # Action de python: Inicializando o ambiente para trabalhar com python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'          
-      - name: "Usando o shell python"
+          echo "Primeira execução no kind"
+          echo "testes"
+          pwd
+          ls 
+      - name: "Segunda execução [python]"
         run: |
-          variavel = "teste"
+          variavel="teste"
           print(variavel)
         shell: python
