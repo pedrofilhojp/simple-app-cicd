@@ -20,14 +20,44 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: build  # <- O job 'test' só inicia depois que 'build' terminar
+    needs: build 
     steps:
-      - name: Run tests
-        run: echo "Executando testes unitários..."
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Executar testes e gerar relatório
+        run: |
+          echo "Testes passaram com sucesso!" > resultado-teste.txt
+          echo "Data: $(date)" >> resultado-teste.txt
+          ls 
+
+      # Passo 1: Salva o arquivo nos servidores do GitHub
+      - name: Upload do arquivo de teste
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-testes                # Nome do pacote do artefato
+          path: resultado-teste.txt             # Caminho do arquivo que será copiado
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build   # <- O job 'deploy' só inicia depois que 'test' terminar
+    needs: test                                 # Garante que o deploy só roda após o teste terminar
     steps:
-      - name: Deploy to production
-        run: echo "Fazendo deploy em produção!"
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      
+      - name: "Visualizando o repositório"
+        run: ls
+
+      # Passo 2: Baixa o arquivo salvo pelo job anterior
+      - name: Download do arquivo de teste
+        uses: actions/download-artifact@v4
+        with:
+          name: relatorio-testes                # Deve ser o mesmo nome usado no upload
+
+      # Passo 3: Usa o arquivo baixado
+      - name: Ler relatório e fazer Deploy
+        run: |
+          ls
+          echo "Lendo o arquivo copiado do job anterior:"
+          cat resultado-teste.txt
+          echo "Iniciando o deploy..."
