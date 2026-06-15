@@ -19,7 +19,7 @@ jobs:
           echo "Segunda execução no kind"
           echo "Parabéns"
       - name: "Usando o shell python"
-        shell: python
         run: |
           variavel = "teste"
           print(variavel)
+        shell: python
