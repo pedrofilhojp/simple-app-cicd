@@ -13,4 +13,7 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-        
+      - name: kubectl get deployments
+        uses: abgeo/kubectl-action@1.25.3
+        with:
+          arg: get deployments        
