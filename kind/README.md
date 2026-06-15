@@ -16,7 +16,7 @@ Guia para criar um cluster Kind local com 1 control-plane e instalar o GitHub Ac
 ## 1. Criar o cluster Kind
 
 ```bash
-kind create cluster --config kind/kind-config.yaml
+kind create cluster --config kind-config.yaml
 ```
 
 Verifique se o cluster está funcionando:
@@ -116,6 +116,7 @@ O arquivo [runner-rbac.yaml](runner-rbac.yaml) cria:
 O `cluster-admin` é um `ClusterRole` built-in do Kubernetes que concede permissão `*` sobre todos os recursos, em todos os namespaces e em todos os apiGroups.
 
 ```bash
+kubectl create ns arc-runners
 kubectl apply -f runner-rbac.yaml
 ```
 
@@ -166,7 +167,7 @@ helm install arc-runner-set \
   oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set \
   --namespace arc-runners \
   --create-namespace \
-  --values kind/values-runner.yaml
+  --values values-runner.yaml
 ```
 
 **Opção B — via `--set` em linha de comando (útil para ajustes pontuais ou automação):**
@@ -257,7 +258,7 @@ Aplique a atualização:
 helm upgrade arc-runner-set \
   oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set \
   --namespace arc-runners \
-  --values kind/values-runner.yaml
+  --values values-runner.yaml
 ```
 
 ---
