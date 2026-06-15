@@ -85,7 +85,48 @@ Antes de instalar o runner você precisa de um token com as permissões corretas
 
 ---
 
-## 4. Configurar e instalar o Runner
+## 4. Conceder acesso à API do Kubernetes ao runner
+
+Como o runner roda **dentro do próprio cluster**, ele pode autenticar na API do Kubernetes via **in-cluster config** — o `kubectl` detecta automaticamente que está dentro de um pod e usa o token do ServiceAccount montado em `/var/run/secrets/kubernetes.io/serviceaccount/`.
+
+Isso elimina a necessidade de armazenar um `KUBE_CONFIG` como secret no GitHub.
+
+### Como funciona
+
+```
+pod do runner
+└── /var/run/secrets/kubernetes.io/serviceaccount/
+    ├── token      ← token JWT do ServiceAccount
+    ├── ca.crt     ← certificado do cluster
+    └── namespace  ← namespace atual
+
+kubectl lê esses arquivos + as env vars KUBERNETES_SERVICE_HOST e
+KUBERNETES_SERVICE_PORT e se conecta à API sem nenhuma configuração extra.
+```
+
+### 4.1 Aplicar o manifesto RBAC
+
+O arquivo [runner-rbac.yaml](runner-rbac.yaml) cria:
+
+| Recurso | Nome | O que faz |
+|---|---|---|
+| `ServiceAccount` | `runner-sa` | identidade do pod do runner no cluster |
+| `ClusterRoleBinding` | `runner-admin-binding` | vincula o `runner-sa` ao `cluster-admin`, concedendo acesso total ao cluster |
+
+O `cluster-admin` é um `ClusterRole` built-in do Kubernetes que concede permissão `*` sobre todos os recursos, em todos os namespaces e em todos os apiGroups.
+
+```bash
+kubectl apply -f runner-rbac.yaml
+```
+
+O `values-runner.yaml` já está configurado com `serviceAccountName: runner-sa` para que os pods do runner usem esse ServiceAccount.
+
+> **Atenção:** `cluster-admin` é adequado para ambientes locais de desenvolvimento e estudo.
+> Em produção, recomenda-se criar um `ClusterRole` customizado com apenas as permissões necessárias.
+
+---
+
+## 5. Configurar e instalar o Runner
 
 Há duas formas de passar parâmetros na instalação — use uma delas ou combine as duas:
 
@@ -160,7 +201,7 @@ kubectl get pods -n arc-runners
 
 ---
 
-## 5. Configurar o runner no repositório GitHub
+## 6. Configurar o runner no repositório GitHub
 
 Após a instalação, o runner aparecerá automaticamente no GitHub desde que o token e a URL estejam corretos.
 
@@ -172,7 +213,7 @@ Para confirmar:
 
 ---
 
-## 6. Usar o runner em um workflow
+## 7. Usar o runner em um workflow
 
 No arquivo de workflow (`.github/workflows/*.yaml`), referencie o runner pelo nome definido no Helm release. Para este primeiro exemplo, vamos usar o conteúdo do arquivo [main.yaml](main.yaml)
 
@@ -201,7 +242,7 @@ jobs:
 
 ---
 
-## 7. Ajustar o número de runners (escalonamento)
+## 8. Ajustar o número de runners (escalonamento)
 
 Edite `values-runner.yaml` e altere os limites:
 
@@ -221,7 +262,7 @@ helm upgrade arc-runner-set \
 
 ---
 
-## 8. Destruir o cluster
+## 9. Destruir o cluster
 
 ```bash
 kind delete cluster --name cicd-cluster
