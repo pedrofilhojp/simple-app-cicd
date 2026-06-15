@@ -13,11 +13,11 @@ jobs:
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
         run: echo "$RUNNER_CONTEXT"
-      - name: Configuração contexto kuberntes
-        uses: azure/k8s-set-context@v5 # https://github.com/marketplace/actions/kubernetes-set-context
-        with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      # - name: Configuração contexto kuberntes
+      #   uses: azure/k8s-set-context@v5 # https://github.com/marketplace/actions/kubernetes-set-context
+      #   with:
+      #     method: kubeconfig
+      #     kubeconfig: ${{ secrets.KUBE_CONFIG }}
       - name: "instalando kubectl"
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
