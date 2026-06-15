@@ -18,7 +18,7 @@ jobs:
       
       - run: sleep 5
 
-  test:
+  pushish:
     runs-on: ubuntu-latest
     needs: build 
     steps:
@@ -40,24 +40,16 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: test                                 # Garante que o deploy só roda após o teste terminar
+    needs: publish                                 # Garante que o deploy só roda após o teste terminar
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
       
-      - name: "Visualizando o repositório"
-        run: ls
-
-      # Passo 2: Baixa o arquivo salvo pelo job anterior
-      - name: Download do arquivo de teste
-        uses: actions/download-artifact@v4
+      - name: Configurando o kubectl
+        uses: azure/k8s-set-context@v5
         with:
-          name: relatorio-testes                # Deve ser o mesmo nome usado no upload
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
-      # Passo 3: Usa o arquivo baixado
-      - name: Ler relatório e fazer Deploy
-        run: |
-          ls
-          echo "Lendo o arquivo copiado do job anterior:"
-          cat resultado-teste.txt
-          echo "Iniciando o deploy..."
+      - name: Comando do kubernetes
+        run: kubectl get nodes
