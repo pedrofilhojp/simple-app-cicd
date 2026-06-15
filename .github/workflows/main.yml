@@ -24,3 +24,11 @@ jobs:
           variavel="teste"
           print(variavel)
         shell: python
+  segundo-job:
+    steps:
+      - name: "Execução shell"
+        run: |
+          echo "Primeira execução no kind"
+          echo "testes"
+          pwd
+          ls 
