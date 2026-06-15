@@ -7,7 +7,7 @@ on:
   workflow_dispatch: # Permite que seja executado manualmente
 
 jobs:
-  build:
+  primeiro-job:
     name: "Meu primeiro Job"
     runs-on: arc-runner-set  # nome do Helm release
     steps:
@@ -18,6 +18,14 @@ jobs:
         run: |
           echo "Segunda execução no kind"
           echo "Parabéns"
+  segundo-job:
+    name: "Segundo Job"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python # Action de python: Inicializando o ambiente para trabalhar com python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'          
       - name: "Usando o shell python"
         run: |
           variavel = "teste"
