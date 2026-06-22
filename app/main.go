@@ -30,7 +30,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `
 <html>
 <head>
-	<title>Go Demo</title>
+	<title>Go Demo v2</title>
 </head>
 <body>
 	<h1>Olá Kubernetes!</h1>
