@@ -20,7 +20,6 @@ Rodar o runner como `root` é desencorajado. Crie um usuário sem privilégios:
 
 ```bash
 sudo useradd -m -s /bin/bash github-runner
-sudo usermod -aG docker github-runner  # permite executar docker sem sudo
 ```
 
 ---
@@ -41,31 +40,41 @@ Execute os comandos abaixo como o usuário `github-runner`:
 ```bash
 sudo su - github-runner
 
-# Criar diretório do runner
-mkdir -p ~/actions-runner && cd ~/actions-runner
+# Create a folder
+$ mkdir actions-runner && cd actions-runner
 
-# Baixar o pacote (verificar a versão mais recente em https://github.com/actions/runner/releases)
-curl -o actions-runner-linux-x64.tar.gz -L \
-  https://github.com/actions/runner/releases/download/v2.323.0/actions-runner-linux-x64-2.323.0.tar.gz
+# Download the latest runner package
+$ wget https://github.com/actions/runner/releases/download/v2.335.1/actions-runner-linux-x64-2.335.1.tar.gz
 
-# Extrair
-tar xzf actions-runner-linux-x64.tar.gz
+# Optional: Validate the hash
+$ echo "4ef2f25285f0ae4477f1fe1e346db76d2f3ebf03824e2ddd1973a2819bf6c8cf  actions-runner-linux-x64-2.335.1.tar.gz" | shasum -a 256 -c
+
+# Extract the installer
+$ tar xzf ./actions-runner-linux-x64-2.335.1.tar.gz
 ```
 
 ### Configurar com o repositório
-
 ```bash
 ./config.sh \
   --url https://github.com/SEU_ORG/SEU_REPO \
   --token SEU_TOKEN_DE_REGISTRO \
   --name host-runner \
-  --labels host,linux,kind-host \
+  --labels host,linux \
   --work _work
 ```
 
 > Os valores `--url` e `--token` são exibidos pelo GitHub na tela de novo runner (passo 2).
 > O `--labels` permite identificar esse runner no workflow com `runs-on: kind-host`.
 
+
+Por fim, vai aparecer algo parecido com isso
+![alt text](image.png)
+
+Para um teste rápido, execute o runner
+```bash
+./run.sh
+```
+![alt text](image-1.png)
 ---
 
 ## 4. Instalar como serviço systemd
@@ -84,6 +93,8 @@ sudo /home/github-runner/actions-runner/svc.sh status
 # ou
 sudo systemctl status actions.runner.*.service
 ```
+
+
 
 ---
 
@@ -117,24 +128,7 @@ Como o runner roda no host, ele tem acesso direto a:
 
 ---
 
-## 7. Carregar a imagem Docker no cluster Kind
-
-Após o build no host, a imagem precisa ser carregada no Kind para que o cluster possa usá-la:
-
-```bash
-kind load docker-image minha-app:latest --name cicd-cluster
-```
-
-Adicione esse passo no workflow:
-
-```yaml
-- name: Carregar imagem no Kind
-  run: kind load docker-image minha-app:latest --name cicd-cluster
-```
-
----
-
-## 8. Remover o runner
+## 7. Remover o runner
 
 Para desregistrar e remover o serviço:
 
